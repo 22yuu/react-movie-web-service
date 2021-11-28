@@ -10,33 +10,33 @@
   <!-- JSX 사용을 위한 Babel 라이브러리-->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
-    function Btn({ anyName, big }) {
+    function Btn({ text, changeValue }) {
       // props: 버튼으로 부터 전달받은 proerties
-      // console.log(props);
+      console.log(text, "was rendered");
       return (
         <button
+          onClick={changeValue}
           style={{
             backgroundColor: "tomato",
             color: "white",
             padding: "10px 20px",
             border: 0,
             borderRadius: 10,
-            fontSize: big ? 18 : 16,
           }}
         >
-          {anyName}
+          {text}
         </button>
       );
     }
-
+    const MemorizeBtn = React.memo(Btn);
     function App() {
-      /*
-        리액트 컴포넌트의 재사용
-      */
+      const [value, setValue] = React.useState("Save Changes"); // 최적화 관련
+      const changeValue = () => setValue("Revert Changes");
       return (
         <div>
-          <Btn anyName="Save Cyahges" big={true} />
-          <Btn anyName="Confirm" big={false} />
+          <MemorizeBtn text={value} changeValue={changeValue} />
+          {/*여기서 onClick은 이름만 같을뿐 props의 속성 중 하나, 이벤트리스너가 아님 햇갈리니까 changeValue*/}
+          <MemorizeBtn text="Confirm" />
         </div>
       );
     }
